@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Example_Springboot"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivityStudent.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

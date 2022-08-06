@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/drawable/ic_add_white_24dp.xml" value="0.1365" />
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/drawable/ic_back_white_24dp.xml" value="0.1365" />
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/drawable/ic_done_white_24dp.xml" value="0.1365" />
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/drawable/ic_score_gray_24dp.xml" value="0.1365" />
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/drawable/shape_back_text.xml" value="0.1365" />
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/drawable/shape_back_text_aval.xml" value="0.1365" />
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout/fragment_add_student.xml" value="0.253125" />
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout/item_student.xml" value="0.4" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

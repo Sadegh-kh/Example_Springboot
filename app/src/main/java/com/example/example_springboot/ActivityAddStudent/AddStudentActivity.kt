@@ -9,8 +9,8 @@ import com.example.example_springboot.model.Student
 import com.example.example_springboot.util.Constant
 import com.example.example_springboot.util.showToast
 
-class StudentAddActivity : AppCompatActivity(),AddStudentContract.View {
-    lateinit var presenterAddStudent:AddStudentContract.Presenter
+class AddStudentActivity : AppCompatActivity(),AddStudentContract.View {
+    private val presenterAddStudent:AddStudentContract.Presenter=Presenter()
     lateinit var binding: ActivityStudentAddBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         binding= ActivityStudentAddBinding.inflate(layoutInflater)
@@ -42,6 +42,15 @@ class StudentAddActivity : AppCompatActivity(),AddStudentContract.View {
         }
 
     }
+    private fun checkBox() {
+        if (binding.editTxtFirstName.text!!.isEmpty()||
+            binding.editTxtLastName.text!!.isEmpty()||
+            binding.editTxtCourse.text!!.isEmpty()||
+            binding.editTxtScore.text!!.isEmpty()
+        ){
+            showToast("Complete the fields !!")
+        }
+    }
 
     private fun createNewStudent() {
         val firstName = binding.editTxtFirstName.text.toString()
@@ -52,19 +61,9 @@ class StudentAddActivity : AppCompatActivity(),AddStudentContract.View {
             firstName,
             lastName,
             course,
-            score.toInt()
+            score
         )
         presenterAddStudent.addNewStudent(newStudent)
-    }
-
-    private fun checkBox() {
-        if (binding.editTxtFirstName.text!!.isEmpty()||
-            binding.editTxtLastName.text!!.isEmpty()||
-            binding.editTxtCourse.text!!.isEmpty()||
-            binding.editTxtScore.text!!.isEmpty()
-                ){
-            showToast("Complete the fields !!")
-        }
     }
 
     override fun showNewStudent(student: Student) {
@@ -72,4 +71,5 @@ class StudentAddActivity : AppCompatActivity(),AddStudentContract.View {
         intent.putExtra(Constant.KEY_ADD_STUDENT,student)
         startActivity(intent)
     }
+
 }

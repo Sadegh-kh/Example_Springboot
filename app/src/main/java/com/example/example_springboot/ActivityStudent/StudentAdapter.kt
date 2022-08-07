@@ -17,7 +17,7 @@ class StudentAdapter(private val studentList:ArrayList<Student>):RecyclerView.Ad
         fun bindStudent(student: Student){
             binding.txtName.text="${student.firstName} ${student.lastName}"
             binding.txtCourse.text=student.Course
-            binding.txtScore.text=student.Score.toString()
+            binding.txtScore.text=student.Score
             binding.txtCharFirstName.text= student.firstName[0].uppercaseChar().toString()
         }
     }
@@ -35,5 +35,9 @@ class StudentAdapter(private val studentList:ArrayList<Student>):RecyclerView.Ad
         return studentList.size
     }
 
+    fun addItem(student: Student){
+        studentList.add(0,student)
+        notifyItemInserted(0)
+    }
 
 }

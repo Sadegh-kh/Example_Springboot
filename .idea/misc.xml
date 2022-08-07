@@ -10,10 +10,12 @@
         <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/drawable/shape_back_text.xml" value="0.1365" />
         <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/drawable/shape_back_text_aval.xml" value="0.1365" />
         <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.1984375" />
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout-w1240dp/dialog_add_student.xml" value="0.1984375" />
         <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout-w936dp/activity_login.xml" value="0.190625" />
         <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout/activity_login.xml" value="0.25416666666666665" />
         <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout/activity_student_add.xml" value="0.25416666666666665" />
+        <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout/dialog_add_student.xml" value="0.25416666666666665" />
         <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout/fragment_add_student.xml" value="0.253125" />
         <entry key="..\:/Job/android/git/Example_Springboot/app/src/main/res/layout/item_student.xml" value="0.4" />
       </map>

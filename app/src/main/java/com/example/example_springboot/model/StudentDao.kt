@@ -1,8 +1,6 @@
 package com.example.example_springboot.model
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface StudentDao {
@@ -15,5 +13,11 @@ interface StudentDao {
 
     @Query("SELECT * FROM `Table Student`")
     fun getAllStudents():List<Student>
+
+    @Update
+    fun updateStudent(student: Student)
+
+    @Delete
+    fun deleteStudent(student: Student)
 
 }

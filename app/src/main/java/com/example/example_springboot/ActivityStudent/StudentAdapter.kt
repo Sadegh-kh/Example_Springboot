@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.example_springboot.databinding.ItemStudentBinding
 import com.example.example_springboot.model.Student
 
-class StudentAdapter(private val studentList:ArrayList<Student>):RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
+class StudentAdapter(private val studentList:ArrayList<Student>,private val eventStudent: EventStudent):RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
     lateinit var binding: ItemStudentBinding
 
     inner class StudentViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
@@ -19,6 +19,16 @@ class StudentAdapter(private val studentList:ArrayList<Student>):RecyclerView.Ad
             binding.txtCourse.text=student.Course
             binding.txtScore.text=student.Score
             binding.txtCharFirstName.text= student.firstName[0].uppercaseChar().toString()
+
+            itemView.setOnClickListener {
+                //update
+                eventStudent.onClickStudent(student,adapterPosition)
+            }
+            itemView.setOnLongClickListener {
+                //remove
+                eventStudent.onLongClickStudent(student,adapterPosition)
+                true
+            }
         }
     }
 
@@ -35,9 +45,11 @@ class StudentAdapter(private val studentList:ArrayList<Student>):RecyclerView.Ad
         return studentList.size
     }
 
-    fun addItem(student: Student){
-        studentList.add(0,student)
-        notifyItemInserted(0)
+    interface EventStudent{
+        fun onClickStudent(student: Student,position: Int)
+        fun onLongClickStudent(student: Student,position: Int)
     }
+
+
 
 }

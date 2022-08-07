@@ -5,13 +5,12 @@ import com.example.example_springboot.util.BasePresenter
 
 interface AddStudentContract {
 
-    interface Presenter:BasePresenter<View>{
+    interface PresenterAddStudent:BasePresenter<ViewAddStudent>{
 
         fun addNewStudent(student: Student)
     }
-    interface View{
+    interface ViewAddStudent{
 
         //don't need any fun because i added on my server
-        fun showNewStudent(student: Student)
     }
 }

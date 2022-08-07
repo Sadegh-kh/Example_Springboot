@@ -12,17 +12,18 @@ import com.example.example_springboot.model.Student
 import com.example.example_springboot.model.StudentDao
 import com.example.example_springboot.util.Constant
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContract.ViewMain {
     lateinit var binding: ActivityMainBinding
     private lateinit var studentAdapter: StudentAdapter
-    private lateinit var studentList:ArrayList<Student>
     lateinit var studentDao: StudentDao
+    lateinit var presenterMain: PresenterMain
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
         studentDao=MyDatabase.getDatabase(this).studentDao
+        presenterMain= PresenterMain(studentDao)
+        presenterMain.onAttach(this)
         initUi()
     }
 
@@ -33,29 +34,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initStudentList() {
-        studentList = arrayListOf<Student>(
-            Student("Sadegh", "Khoshbayan", "Android", "150"),
-            Student("Abas", "Khoshbayan", "Web", "130"),
-            Student("Hossain", "Mehdizade", "Web", "180")
-        )
-        studentDao.insertAllStudents(studentList)
-        studentAdapter = StudentAdapter(ArrayList(studentDao.getAllStudents()))
+        studentAdapter = StudentAdapter(ArrayList(studentDao.getAllStudents()),this)
         binding.recyclerStudents.adapter = studentAdapter
         binding.recyclerStudents.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-    }
-    override fun onResume() {
-        super.onResume()
-        addStudent()
-    }
-    private fun addStudent() {
-        val newStudent = intent.getParcelableExtra<Student>(Constant.KEY_ADD_STUDENT)
-        if (newStudent != null) {
-            studentAdapter.addItem(newStudent)
-            binding.recyclerStudents.scrollToPosition(0)
-            Log.v("testList",studentList.toString())
-        }
 
     }
 
@@ -67,7 +49,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //adapter
+    override fun onClickStudent(student: Student, position: Int) {
+        TODO("Not yet implemented")
+    }
 
+    override fun onLongClickStudent(student: Student, position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showAllStudent(studentList: List<Student>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteStudent(oldStudent: Student, position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateStudent(editedStudent: Student, position: Int) {
+        TODO("Not yet implemented")
+    }
 
 
 }

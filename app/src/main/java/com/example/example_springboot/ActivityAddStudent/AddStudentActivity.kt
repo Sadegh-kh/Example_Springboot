@@ -5,17 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.example_springboot.ActivityStudent.MainActivity
 import com.example.example_springboot.databinding.ActivityStudentAddBinding
+import com.example.example_springboot.model.MyDatabase
 import com.example.example_springboot.model.Student
-import com.example.example_springboot.util.Constant
+import com.example.example_springboot.model.StudentDao
 import com.example.example_springboot.util.showToast
 
-class AddStudentActivity : AppCompatActivity(),AddStudentContract.View {
-    private val presenterAddStudent:AddStudentContract.Presenter=Presenter()
+class AddStudentActivity : AppCompatActivity(),AddStudentContract.ViewAddStudent {
+    lateinit var presenterAddStudent: AddStudentContract.PresenterAddStudent
     lateinit var binding: ActivityStudentAddBinding
+    lateinit var studentDao: StudentDao
     override fun onCreate(savedInstanceState: Bundle?) {
         binding= ActivityStudentAddBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        studentDao=MyDatabase.getDatabase(this).studentDao
+        presenterAddStudent=PresenterAddStudent(studentDao)
         presenterAddStudent.onAttach(this)
         initUi()
 
@@ -35,6 +39,7 @@ class AddStudentActivity : AppCompatActivity(),AddStudentContract.View {
         binding.FabSaveStudent.setOnClickListener {
             checkBox()
             createNewStudent()
+            goOnNextPage()
         }
 
         binding.toolBarAddStudent.setNavigationOnClickListener {
@@ -42,6 +47,12 @@ class AddStudentActivity : AppCompatActivity(),AddStudentContract.View {
         }
 
     }
+
+    private fun goOnNextPage() {
+        val intent=Intent(this,MainActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun checkBox() {
         if (binding.editTxtFirstName.text!!.isEmpty()||
             binding.editTxtLastName.text!!.isEmpty()||
@@ -66,10 +77,5 @@ class AddStudentActivity : AppCompatActivity(),AddStudentContract.View {
         presenterAddStudent.addNewStudent(newStudent)
     }
 
-    override fun showNewStudent(student: Student) {
-        val intent=Intent(this,MainActivity::class.java)
-        intent.putExtra(Constant.KEY_ADD_STUDENT,student)
-        startActivity(intent)
-    }
 
 }

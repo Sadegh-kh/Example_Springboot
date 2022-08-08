@@ -13,6 +13,7 @@ import com.example.example_springboot.databinding.DialogUpdateStudentBinding
 import com.example.example_springboot.model.database.MyDatabase
 import com.example.example_springboot.model.Student
 import com.example.example_springboot.model.database.StudentDao
+import com.example.example_springboot.model.server.ApiManager
 import com.example.example_springboot.util.showToast
 
 class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContract.ViewMain {
@@ -20,24 +21,27 @@ class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContrac
     private lateinit var studentAdapter: StudentAdapter
     lateinit var studentDao: StudentDao
     lateinit var presenterMain: PresenterMain
+    lateinit var apiManager: ApiManager
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
         studentDao= MyDatabase.getDatabase(this).studentDao
-        presenterMain= PresenterMain(studentDao)
+        apiManager=ApiManager()
+
+        presenterMain= PresenterMain(studentDao,apiManager)
         presenterMain.onAttach(this)
         initUi()
     }
 
     private fun initUi() {
         actBar()
-        initStudentList()
 
     }
 
-    private fun initStudentList() {
-        studentAdapter = StudentAdapter(ArrayList(studentDao.getAllStudents()),this)
+    private fun initStudentList(studentList: List<Student>) {
+        studentAdapter = StudentAdapter(ArrayList(studentList),this)
         binding.recyclerStudents.adapter = studentAdapter
         binding.recyclerStudents.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -100,9 +104,14 @@ class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContrac
         }
     }
 
-    override fun showAllStudent(studentList: List<Student>) {
-        Toast.makeText(this, "ssss", Toast.LENGTH_SHORT).show()
+    override fun showAllStudentFromServer(studentList: List<Student>) {
+        initStudentList(studentList)
     }
+
+    override fun showAllStudentFromDatabase(studentList: List<Student>) {
+        initStudentList(studentList)
+    }
+
 
     override fun deleteStudent(oldStudent: Student, position: Int) {
         Toast.makeText(this, "ssss", Toast.LENGTH_SHORT).show()
@@ -110,6 +119,10 @@ class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContrac
 
     override fun updateStudent(editedStudent: Student, position: Int) {
         Toast.makeText(this, "ssss", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showError(error: String) {
+        showToast(error)
     }
 
 

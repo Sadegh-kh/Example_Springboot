@@ -16,8 +16,8 @@ class StudentAdapter(private val studentList:ArrayList<Student>,private val even
         @SuppressLint("SetTextI18n")
         fun bindStudent(student: Student){
             binding.txtName.text="${student.firstName} ${student.lastName}"
-            binding.txtCourse.text=student.Course
-            binding.txtScore.text=student.Score
+            binding.txtCourse.text=student.course
+            binding.txtScore.text=student.score
             binding.txtCharFirstName.text= student.firstName[0].uppercaseChar().toString()
 
             itemView.setOnClickListener {

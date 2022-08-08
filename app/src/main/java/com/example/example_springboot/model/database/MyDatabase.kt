@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.example_springboot.model.Student
 
-@Database(entities = [Student::class], version = 1, exportSchema = false)
+@Database(entities = [Student::class], version = 2, exportSchema = false)
 abstract class MyDatabase : RoomDatabase() {
 
     abstract val studentDao: StudentDao
@@ -22,6 +22,7 @@ abstract class MyDatabase : RoomDatabase() {
                     "myDatabase.db"
                 )
                     .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
                     .build()
             }
             return database!!

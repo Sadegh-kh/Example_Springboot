@@ -14,9 +14,12 @@ interface MainContract {
 
     interface ViewMain{
 
-        fun showAllStudent(studentList: List<Student>)
+        fun showAllStudentFromServer(studentList: List<Student>)
+        fun showAllStudentFromDatabase(studentList: List<Student>)
         fun deleteStudent(oldStudent: Student,position: Int)
         fun updateStudent(editedStudent: Student,position: Int)
+
+        fun showError(error:String)
 
     }
 }

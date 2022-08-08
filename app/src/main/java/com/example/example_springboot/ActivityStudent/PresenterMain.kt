@@ -1,7 +1,7 @@
 package com.example.example_springboot.ActivityStudent
 
 import com.example.example_springboot.model.Student
-import com.example.example_springboot.model.StudentDao
+import com.example.example_springboot.model.database.StudentDao
 
 class PresenterMain(private val studentDao: StudentDao) : MainContract.PresenterMain {
     private var mainView: MainContract.ViewMain? = null

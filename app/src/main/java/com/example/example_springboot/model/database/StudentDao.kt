@@ -1,6 +1,7 @@
-package com.example.example_springboot.model
+package com.example.example_springboot.model.database
 
 import androidx.room.*
+import com.example.example_springboot.model.Student
 
 @Dao
 interface StudentDao {

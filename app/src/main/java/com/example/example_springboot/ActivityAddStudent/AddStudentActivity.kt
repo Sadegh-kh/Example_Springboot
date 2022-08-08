@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.example_springboot.ActivityStudent.MainActivity
 import com.example.example_springboot.databinding.ActivityStudentAddBinding
-import com.example.example_springboot.model.MyDatabase
+import com.example.example_springboot.model.database.MyDatabase
 import com.example.example_springboot.model.Student
-import com.example.example_springboot.model.StudentDao
+import com.example.example_springboot.model.database.StudentDao
 import com.example.example_springboot.util.showToast
 
 class AddStudentActivity : AppCompatActivity(),AddStudentContract.ViewAddStudent {
@@ -18,7 +18,7 @@ class AddStudentActivity : AppCompatActivity(),AddStudentContract.ViewAddStudent
         binding= ActivityStudentAddBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        studentDao=MyDatabase.getDatabase(this).studentDao
+        studentDao= MyDatabase.getDatabase(this).studentDao
         presenterAddStudent=PresenterAddStudent(studentDao)
         presenterAddStudent.onAttach(this)
         initUi()

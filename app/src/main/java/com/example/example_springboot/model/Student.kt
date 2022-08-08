@@ -10,8 +10,8 @@ import kotlinx.parcelize.Parcelize
 data class Student(
     val firstName:String,
     val lastName:String,
-    val Course:String,
-    val Score:String,
+    val course:String,
+    val score:String,
     @PrimaryKey(autoGenerate = true)
     val id:Int?=null
 ):Parcelable

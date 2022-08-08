@@ -1,7 +1,7 @@
 package com.example.example_springboot.ActivityAddStudent
 
 import com.example.example_springboot.model.Student
-import com.example.example_springboot.model.StudentDao
+import com.example.example_springboot.model.database.StudentDao
 
 class PresenterAddStudent(private val studentDao: StudentDao):
     AddStudentContract.PresenterAddStudent {

@@ -54,4 +54,10 @@ dependencies {
     //room:
     implementation "androidx.room:room-runtime:2.4.3"
     kapt "androidx.room:room-compiler:2.4.3"
+
+
+    // sweet alert dialog =>
+    implementation "com.github.f0ris.sweetalert:library:1.5.1"
+
+    //retrofit
 }

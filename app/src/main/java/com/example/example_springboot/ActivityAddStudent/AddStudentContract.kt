@@ -11,6 +11,7 @@ interface AddStudentContract {
     }
     interface ViewAddStudent{
 
-        //don't need any fun because i added on my server
+        fun showMassageFromServer(massage:String)
+        fun showNewStudentId(id:Int)
     }
 }

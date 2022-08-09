@@ -3,23 +3,28 @@ package com.example.example_springboot.ActivityAddStudent
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.example_springboot.ActivityStudent.MainActivity
 import com.example.example_springboot.databinding.ActivityStudentAddBinding
 import com.example.example_springboot.model.database.MyDatabase
 import com.example.example_springboot.model.Student
 import com.example.example_springboot.model.database.StudentDao
+import com.example.example_springboot.model.server.ApiManager
 import com.example.example_springboot.util.showToast
 
-class AddStudentActivity : AppCompatActivity(),AddStudentContract.ViewAddStudent {
+class AddStudentActivity : AppCompatActivity(), AddStudentContract.ViewAddStudent {
     lateinit var presenterAddStudent: AddStudentContract.PresenterAddStudent
     lateinit var binding: ActivityStudentAddBinding
     lateinit var studentDao: StudentDao
+    lateinit var apiManager: ApiManager
+    var newId = 0
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding= ActivityStudentAddBinding.inflate(layoutInflater)
+        binding = ActivityStudentAddBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        studentDao= MyDatabase.getDatabase(this).studentDao
-        presenterAddStudent=PresenterAddStudent(studentDao)
+        studentDao = MyDatabase.getDatabase(this).studentDao
+        apiManager = ApiManager()
+        presenterAddStudent = PresenterAddStudent(studentDao, apiManager)
         presenterAddStudent.onAttach(this)
         initUi()
 
@@ -29,6 +34,7 @@ class AddStudentActivity : AppCompatActivity(),AddStudentContract.ViewAddStudent
         presenterAddStudent.onDetach()
         super.onDestroy()
     }
+
     private fun initUi() {
         initActBar()
     }
@@ -37,9 +43,7 @@ class AddStudentActivity : AppCompatActivity(),AddStudentContract.ViewAddStudent
         binding.editTxtFirstName.requestFocus()
 
         binding.FabSaveStudent.setOnClickListener {
-            checkBox()
             createNewStudent()
-            goOnNextPage()
         }
 
         binding.toolBarAddStudent.setNavigationOnClickListener {
@@ -49,33 +53,51 @@ class AddStudentActivity : AppCompatActivity(),AddStudentContract.ViewAddStudent
     }
 
     private fun goOnNextPage() {
-        val intent=Intent(this,MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
-    private fun checkBox() {
-        if (binding.editTxtFirstName.text!!.isEmpty()||
-            binding.editTxtLastName.text!!.isEmpty()||
-            binding.editTxtCourse.text!!.isEmpty()||
+    private fun checkEmptyFields(): Boolean {
+        if (binding.editTxtFirstName.text!!.isEmpty() ||
+            binding.editTxtLastName.text!!.isEmpty() ||
+            binding.editTxtCourse.text!!.isEmpty() ||
             binding.editTxtScore.text!!.isEmpty()
-        ){
-            showToast("Complete the fields !!")
+        ) {
+            return true
+        } else {
+            return false
         }
     }
 
     private fun createNewStudent() {
         val firstName = binding.editTxtFirstName.text.toString()
-        val lastName=binding.editTxtLastName.text.toString()
-        val course=binding.editTxtCourse.text.toString()
-        val score=binding.editTxtScore.text.toString()
+        val lastName = binding.editTxtLastName.text.toString()
+        val course = binding.editTxtCourse.text.toString()
+        val score = binding.editTxtScore.text.toString()
         val newStudent = Student(
             firstName,
             lastName,
             course,
-            score
+            score,
+            newId + 1
         )
-        presenterAddStudent.addNewStudent(newStudent)
+        if (checkEmptyFields()) {
+            showToast("Complete the fields !!")
+        } else {
+            presenterAddStudent.addNewStudent(newStudent)
+            goOnNextPage()
+        }
+
+    }
+
+    override fun showMassageFromServer(massage: String) {
+        Log.v("testApi", massage)
+    }
+
+    override fun showNewStudentId(id: Int) {
+        newId = id
     }
 
 
 }
+

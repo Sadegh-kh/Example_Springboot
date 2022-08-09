@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -16,7 +17,7 @@ import com.example.example_springboot.model.database.StudentDao
 import com.example.example_springboot.model.server.ApiManager
 import com.example.example_springboot.util.showToast
 
-class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContract.ViewMain {
+class MainActivity : AppCompatActivity(), StudentAdapter.EventStudent, MainContract.ViewMain {
     lateinit var binding: ActivityMainBinding
     private lateinit var studentAdapter: StudentAdapter
     lateinit var studentDao: StudentDao
@@ -27,10 +28,10 @@ class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContrac
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        studentDao= MyDatabase.getDatabase(this).studentDao
-        apiManager=ApiManager()
+        studentDao = MyDatabase.getDatabase(this).studentDao
+        apiManager = ApiManager()
 
-        presenterMain= PresenterMain(studentDao,apiManager)
+        presenterMain = PresenterMain(studentDao, apiManager)
         presenterMain.onAttach(this)
         initUi()
     }
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContrac
     }
 
     private fun initStudentList(studentList: List<Student>) {
-        studentAdapter = StudentAdapter(ArrayList(studentList),this)
+        studentAdapter = StudentAdapter(ArrayList(studentList), this)
         binding.recyclerStudents.adapter = studentAdapter
         binding.recyclerStudents.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -58,15 +59,18 @@ class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContrac
 
     //adapter
     override fun onClickStudent(student: Student, position: Int) {
-       val dialog=AlertDialog.Builder(this).create()
-        val dialogUpdateStudentBinding=DialogUpdateStudentBinding.inflate(layoutInflater)
+        val dialog = AlertDialog.Builder(this).create()
+        val dialogUpdateStudentBinding = DialogUpdateStudentBinding.inflate(layoutInflater)
         dialog.setView(dialogUpdateStudentBinding.root)
         dialog.show()
+        completeDialogUpdateFields(dialogUpdateStudentBinding, student)
         dialogUpdateStudentBinding.FabUpdateStudent.setOnClickListener {
             val checkFields = checkBox(dialogUpdateStudentBinding)
-            if (checkFields){
+            if (checkFields) {
                 showToast("Complete the fields !!")
-            }else{
+            } else {
+                val newStudent = updatedStudent(dialogUpdateStudentBinding, student.id)
+                presenterMain.onUpdateStudent(newStudent, position)
                 dialog.dismiss()
             }
         }
@@ -75,14 +79,37 @@ class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContrac
         }
     }
 
+    private fun updatedStudent(
+        dialogUpdateStudentBinding: DialogUpdateStudentBinding,
+        id: Int?
+    ): Student {
+        val firstName = dialogUpdateStudentBinding.editTxtFirstName.text.toString()
+        val lastName = dialogUpdateStudentBinding.editTxtLastName.text.toString()
+        val course = dialogUpdateStudentBinding.editTxtCourse.text.toString()
+        val score = dialogUpdateStudentBinding.editTxtScore.text.toString()
+
+        return Student(firstName, lastName, course, score, id)
+
+    }
+
+    private fun completeDialogUpdateFields(
+        dialogUpdateStudentBinding: DialogUpdateStudentBinding,
+        student: Student
+    ) {
+        dialogUpdateStudentBinding.editTxtFirstName.setText(student.firstName)
+        dialogUpdateStudentBinding.editTxtLastName.setText(student.lastName)
+        dialogUpdateStudentBinding.editTxtCourse.setText(student.course)
+        dialogUpdateStudentBinding.editTxtScore.setText(student.score)
+    }
+
     override fun onLongClickStudent(student: Student, position: Int) {
-        val sweetAlertDialog= SweetAlertDialog(this,SweetAlertDialog.WARNING_TYPE)
+        val sweetAlertDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
             .setTitleText("Are you sure ?")
             .setContentText("Won't be able to recover this file ")
             .setConfirmText("Yes,Delete it!")
             .setCancelText("Cancel")
             .setConfirmClickListener {
-
+                presenterMain.onDeleteStudent(student,position)
                 it.dismiss()
             }
             .setCancelClickListener {
@@ -92,14 +119,14 @@ class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContrac
 
     }
 
-    private fun checkBox(dialogUpdateStudentBinding: DialogUpdateStudentBinding):Boolean {
-        if (dialogUpdateStudentBinding.editTxtFirstName.text!!.isEmpty()||
-            dialogUpdateStudentBinding.editTxtLastName.text!!.isEmpty()||
-            dialogUpdateStudentBinding.editTxtCourse.text!!.isEmpty()||
+    private fun checkBox(dialogUpdateStudentBinding: DialogUpdateStudentBinding): Boolean {
+        if (dialogUpdateStudentBinding.editTxtFirstName.text!!.isEmpty() ||
+            dialogUpdateStudentBinding.editTxtLastName.text!!.isEmpty() ||
+            dialogUpdateStudentBinding.editTxtCourse.text!!.isEmpty() ||
             dialogUpdateStudentBinding.editTxtScore.text!!.isEmpty()
-        ){
+        ) {
             return true
-        }else{
+        } else {
             return false
         }
     }
@@ -112,17 +139,16 @@ class MainActivity : AppCompatActivity(),StudentAdapter.EventStudent,MainContrac
         initStudentList(studentList)
     }
 
-
     override fun deleteStudent(oldStudent: Student, position: Int) {
-        Toast.makeText(this, "ssss", Toast.LENGTH_SHORT).show()
+        studentAdapter.onRemoveStudent(oldStudent,position)
     }
 
     override fun updateStudent(editedStudent: Student, position: Int) {
-        Toast.makeText(this, "ssss", Toast.LENGTH_SHORT).show()
+        studentAdapter.onUpdateRecyclerList(editedStudent, position)
     }
 
     override fun showError(error: String) {
-        showToast(error)
+        Log.v("testApi",error)
     }
 
 

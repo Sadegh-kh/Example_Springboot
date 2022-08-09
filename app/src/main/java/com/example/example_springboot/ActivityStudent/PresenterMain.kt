@@ -3,6 +3,8 @@ package com.example.example_springboot.ActivityStudent
 import com.example.example_springboot.model.Student
 import com.example.example_springboot.model.database.StudentDao
 import com.example.example_springboot.model.server.ApiManager
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 
 class PresenterMain(private val studentDao: StudentDao,private val apiManager: ApiManager) : MainContract.PresenterMain {
     private var mainView: MainContract.ViewMain? = null
@@ -31,12 +33,38 @@ class PresenterMain(private val studentDao: StudentDao,private val apiManager: A
 
 
     override fun onDeleteStudent(student: Student, position: Int) {
-        studentDao.deleteStudent(student)
+//        studentDao.deleteStudent(student)
+
+        apiManager.deleteStudent(object :ApiManager.ApiCallBack<String>{
+            override fun onSuccess(data: String) {
+                mainView!!.showError(data)
+            }
+
+            override fun onError(error: String) {
+                mainView!!.showError(error)
+            }
+        },student.id!!)
         mainView!!.deleteStudent(student,position)
     }
 
     override fun onUpdateStudent(student: Student, position: Int) {
-        studentDao.updateStudent(student)
+//        studentDao.updateStudent(student)
+        val jsonStudentObject= JsonObject()
+        jsonStudentObject.addProperty("id",student.id)
+        jsonStudentObject.addProperty("firstName",student.firstName)
+        jsonStudentObject.addProperty("lastName",student.lastName)
+        jsonStudentObject.addProperty("course",student.course)
+        jsonStudentObject.addProperty("score",student.score)
+
+        apiManager.updateStudent(object :ApiManager.ApiCallBack<String>{
+            override fun onSuccess(data: String) {
+                mainView!!.showError(data)
+            }
+
+            override fun onError(error: String) {
+                mainView!!.showError(error)
+            }
+        },student.id!!,jsonStudentObject)
         mainView!!.updateStudent(student,position)
     }
 }

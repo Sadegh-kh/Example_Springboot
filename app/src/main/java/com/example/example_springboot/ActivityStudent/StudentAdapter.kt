@@ -45,6 +45,17 @@ class StudentAdapter(private val studentList:ArrayList<Student>,private val even
         return studentList.size
     }
 
+    fun onUpdateRecyclerList(student: Student,position: Int){
+        studentList.set(position,student)
+        notifyItemChanged(position)
+
+    }
+
+    fun onRemoveStudent(student: Student,position: Int){
+        studentList.remove(student)
+        notifyItemRemoved(position)
+
+    }
     interface EventStudent{
         fun onClickStudent(student: Student,position: Int)
         fun onLongClickStudent(student: Student,position: Int)

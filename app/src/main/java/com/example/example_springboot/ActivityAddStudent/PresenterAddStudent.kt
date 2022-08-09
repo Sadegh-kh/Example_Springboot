@@ -1,9 +1,9 @@
 package com.example.example_springboot.ActivityAddStudent
 
-import android.util.Log
 import com.example.example_springboot.model.Student
 import com.example.example_springboot.model.database.StudentDao
 import com.example.example_springboot.model.server.ApiManager
+import com.google.gson.JsonObject
 
 class PresenterAddStudent(private val studentDao: StudentDao,private val apiManager: ApiManager):
     AddStudentContract.PresenterAddStudent {
@@ -30,6 +30,13 @@ class PresenterAddStudent(private val studentDao: StudentDao,private val apiMana
         //add on api =>
 //        studentDao.insertStudent(student)
 
+        val jsonStudentObject= JsonObject()
+        jsonStudentObject.addProperty("id",student.id)
+        jsonStudentObject.addProperty("firstName",student.firstName)
+        jsonStudentObject.addProperty("lastName",student.lastName)
+        jsonStudentObject.addProperty("course",student.course)
+        jsonStudentObject.addProperty("score",student.score)
+
         apiManager.insertStudent(object :ApiManager.ApiCallBack<String>{
             override fun onSuccess(data: String) {
                 mainView!!.showMassageFromServer(data)
@@ -38,7 +45,7 @@ class PresenterAddStudent(private val studentDao: StudentDao,private val apiMana
             override fun onError(error: String) {
                 mainView!!.showMassageFromServer(error)
             }
-        },student)
+        },jsonStudentObject)
     }
 
 }

@@ -37,20 +37,39 @@ class ApiManager {
         })
     }
 
-    fun insertStudent(apiCallBack: ApiCallBack<String>,newStudent: Student){
-        val jsonObject=JsonObject()
-        jsonObject.addProperty("id",newStudent.id)
-        jsonObject.addProperty("firstName",newStudent.firstName)
-        jsonObject.addProperty("lastName",newStudent.lastName)
-        jsonObject.addProperty("course",newStudent.course)
-        jsonObject.addProperty("score",newStudent.score)
-        apiService.insertStudent(jsonObject).enqueue(object :Callback<String>{
+    fun insertStudent(apiCallBack: ApiCallBack<String>,newStudent: JsonObject){
+
+        apiService.insertStudent(newStudent).enqueue(object :Callback<String>{
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 apiCallBack.onSuccess(response.body()!!)
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                apiCallBack.onError(t.message!!)
+            }
+        })
+    }
+
+    fun updateStudent(apiCallBack: ApiCallBack<String>,id:Int,editStudent:JsonObject){
+        apiService.updateStudent(id,editStudent).enqueue(object :Callback<String>{
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                apiCallBack.onSuccess(response.body()!!)
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                apiCallBack.onError(t.message!!)
+            }
+        })
+    }
+
+    fun deleteStudent(apiCallBack: ApiCallBack<String>,id:Int){
+        apiService.deleteStudent(id).enqueue(object :Callback<String>{
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                apiCallBack.onSuccess(response.body()!!)
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                apiCallBack.onError(t.message!!)
             }
         })
     }

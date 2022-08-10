@@ -3,12 +3,16 @@ package com.example.example_springboot.model.server
 import android.util.Log
 import com.example.example_springboot.model.Student
 import com.example.example_springboot.util.Constant
-import com.google.gson.Gson
 import com.google.gson.JsonObject
+import io.reactivex.SingleObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiManager {
@@ -18,23 +22,30 @@ class ApiManager {
         val retrofit= Retrofit.Builder()
             .baseUrl(Constant.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
         apiService=retrofit.create(ApiService::class.java)
     }
 
     fun getAllStudent(apiCallBack: ApiCallBack<List<Student>>){
-        apiService.getAllStudent().enqueue(object :Callback<List<Student>>{
-            override fun onResponse(call: Call<List<Student>>, response: Response<List<Student>>) {
-                val allStudent=response.body()!!
-                apiCallBack.onSuccess(allStudent)
-                Log.v("testList",allStudent.toString())
-            }
+        apiService
+            .getAllStudent()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object :SingleObserver<List<Student>>{
+                override fun onSubscribe(d: Disposable) {
+                    apiCallBack.onSubscribe(d)
+                }
 
-            override fun onFailure(call: Call<List<Student>>, t: Throwable) {
-                apiCallBack.onError(t.message!!)
-            }
-        })
+                override fun onSuccess(t: List<Student>) {
+                    apiCallBack.onSuccess(t)
+                }
+
+                override fun onError(e: Throwable) {
+                    apiCallBack.onError(e.message!!)
+                }
+            })
     }
 
     fun insertStudent(apiCallBack: ApiCallBack<String>,newStudent: JsonObject){
@@ -76,7 +87,7 @@ class ApiManager {
 
     interface ApiCallBack<T>{
         fun onSuccess(data:T)
-
         fun onError(error:String)
+        fun onSubscribe(disposable: Disposable)
     }
 }

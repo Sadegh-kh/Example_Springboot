@@ -4,6 +4,7 @@ import com.example.example_springboot.model.Student
 import com.example.example_springboot.model.database.StudentDao
 import com.example.example_springboot.model.server.ApiManager
 import com.google.gson.JsonObject
+import io.reactivex.disposables.Disposable
 
 class PresenterAddStudent(private val studentDao: StudentDao,private val apiManager: ApiManager):
     AddStudentContract.PresenterAddStudent {
@@ -18,6 +19,10 @@ class PresenterAddStudent(private val studentDao: StudentDao,private val apiMana
 
             override fun onError(error: String) {
                 mainView!!.showMassageFromServer(error)
+            }
+
+            override fun onSubscribe(disposable: Disposable) {
+                mainView!!.disposableStudentAddActivity(disposable)
             }
         })
     }
@@ -44,6 +49,10 @@ class PresenterAddStudent(private val studentDao: StudentDao,private val apiMana
 
             override fun onError(error: String) {
                 mainView!!.showMassageFromServer(error)
+            }
+
+            override fun onSubscribe(disposable: Disposable) {
+                mainView!!.disposableStudentAddActivity(disposable)
             }
         },jsonStudentObject)
     }

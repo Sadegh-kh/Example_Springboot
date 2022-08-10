@@ -11,6 +11,7 @@ import com.example.example_springboot.model.Student
 import com.example.example_springboot.model.database.StudentDao
 import com.example.example_springboot.model.server.ApiManager
 import com.example.example_springboot.util.showToast
+import io.reactivex.disposables.Disposable
 
 class AddStudentActivity : AppCompatActivity(), AddStudentContract.ViewAddStudent {
     lateinit var presenterAddStudent: AddStudentContract.PresenterAddStudent
@@ -18,6 +19,7 @@ class AddStudentActivity : AppCompatActivity(), AddStudentContract.ViewAddStuden
     lateinit var studentDao: StudentDao
     lateinit var apiManager: ApiManager
     var newId = 0
+    lateinit var disposableAddStudentActivity: Disposable
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityStudentAddBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -32,6 +34,7 @@ class AddStudentActivity : AppCompatActivity(), AddStudentContract.ViewAddStuden
 
     override fun onDestroy() {
         presenterAddStudent.onDetach()
+        disposableAddStudentActivity.dispose()
         super.onDestroy()
     }
 
@@ -96,6 +99,10 @@ class AddStudentActivity : AppCompatActivity(), AddStudentContract.ViewAddStuden
 
     override fun showNewStudentId(id: Int) {
         newId = id
+    }
+
+    override fun disposableStudentAddActivity(disposable: Disposable) {
+        disposableAddStudentActivity=disposable
     }
 
 

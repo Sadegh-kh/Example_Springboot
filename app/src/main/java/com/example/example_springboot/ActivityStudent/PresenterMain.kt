@@ -5,6 +5,7 @@ import com.example.example_springboot.model.database.StudentDao
 import com.example.example_springboot.model.server.ApiManager
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import io.reactivex.disposables.Disposable
 
 class PresenterMain(private val studentDao: StudentDao,private val apiManager: ApiManager) : MainContract.PresenterMain {
     private var mainView: MainContract.ViewMain? = null
@@ -18,6 +19,10 @@ class PresenterMain(private val studentDao: StudentDao,private val apiManager: A
             }
             override fun onError(error: String) {
                 mainView!!.showError(error)
+            }
+
+            override fun onSubscribe(disposable: Disposable) {
+               mainView!!.disposableStudent(disposable)
             }
         })
 
@@ -43,6 +48,10 @@ class PresenterMain(private val studentDao: StudentDao,private val apiManager: A
             override fun onError(error: String) {
                 mainView!!.showError(error)
             }
+
+            override fun onSubscribe(disposable: Disposable) {
+                TODO("Not yet implemented")
+            }
         },student.id!!)
         mainView!!.deleteStudent(student,position)
     }
@@ -63,6 +72,10 @@ class PresenterMain(private val studentDao: StudentDao,private val apiManager: A
 
             override fun onError(error: String) {
                 mainView!!.showError(error)
+            }
+
+            override fun onSubscribe(disposable: Disposable) {
+                TODO("Not yet implemented")
             }
         },student.id!!,jsonStudentObject)
         mainView!!.updateStudent(student,position)

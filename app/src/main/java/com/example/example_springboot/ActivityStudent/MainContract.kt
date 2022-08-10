@@ -2,6 +2,7 @@ package com.example.example_springboot.ActivityStudent
 
 import com.example.example_springboot.model.Student
 import com.example.example_springboot.util.BasePresenter
+import io.reactivex.disposables.Disposable
 
 interface MainContract {
 
@@ -20,6 +21,8 @@ interface MainContract {
         fun updateStudent(editedStudent: Student,position: Int)
 
         fun showError(error:String)
+
+        fun disposableStudent(disposable: Disposable)
 
     }
 }

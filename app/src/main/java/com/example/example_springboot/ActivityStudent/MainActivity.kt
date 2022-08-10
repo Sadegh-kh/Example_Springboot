@@ -16,6 +16,7 @@ import com.example.example_springboot.model.Student
 import com.example.example_springboot.model.database.StudentDao
 import com.example.example_springboot.model.server.ApiManager
 import com.example.example_springboot.util.showToast
+import io.reactivex.disposables.Disposable
 
 class MainActivity : AppCompatActivity(), StudentAdapter.EventStudent, MainContract.ViewMain {
     lateinit var binding: ActivityMainBinding
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity(), StudentAdapter.EventStudent, MainContr
     lateinit var studentDao: StudentDao
     lateinit var presenterMain: PresenterMain
     lateinit var apiManager: ApiManager
+
+    lateinit var disposableMain: Disposable
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -149,6 +152,15 @@ class MainActivity : AppCompatActivity(), StudentAdapter.EventStudent, MainContr
 
     override fun showError(error: String) {
         Log.v("testApi",error)
+    }
+
+    override fun disposableStudent(disposable: Disposable) {
+        disposableMain=disposable
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposableMain.dispose()
     }
 
 

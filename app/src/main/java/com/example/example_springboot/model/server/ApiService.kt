@@ -2,6 +2,7 @@ package com.example.example_springboot.model.server
 
 import com.example.example_springboot.model.Student
 import com.google.gson.JsonObject
+import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -9,7 +10,7 @@ import retrofit2.http.*
 interface ApiService {
 
     @GET("/student")
-    fun getAllStudent():Call<List<Student>>
+    fun getAllStudent():Single<List<Student>>
 
     @POST("/student")
     fun insertStudent(@Body body:JsonObject):Call<String>
